@@ -25,18 +25,18 @@ Here are some of the key pages and features of the Property Rent/Purchase Site:
 ### Landing Page
 
 The home page provides an overview of the platform and showcases featured properties, testimonials, and encourages users to sign up.
-![](screenshots\landing1.png)
-![](screenshots\landing2.png)
+![](screenshots/landing1.png)
+![](screenshots/landing2.png)
 ### Signup Page
 
 The signup page where a user can register and unlock many privileges
-![](screenshots\signUp.png)
+![](screenshots/signUp.png)
 
 
 ### Explore
 
 The explore page includes the property search functionality, allowing users to specify their criteria and find properties that match their preferences. The search results are displayed in an organized manner, making it easy for users to explore available options. This page also allows logged-in users to save their searches, create alerts, and save properties.
-![](screenshots\explore.png)
+![](screenshots/explore.png)
 ### Property Details
 
 Each property listing has a dedicated page with comprehensive details about the property. Users can view images, read the property description, check amenities, and get in touch with the property owner/agent for more information.
@@ -44,15 +44,15 @@ Each property listing has a dedicated page with comprehensive details about the 
 ### User Dashboard
 
 Users can create accounts on the platform to access additional features. With a user account, they can list their properties, save their favorite listings, save search history, and receive email alerts for new properties that match their criteria.
-![](screenshots\userDashboard1.png)
-![](screenshots\userDashboard2.png)
-![](screenshots\userDashboard3.png)
-![](screenshots\userDashboard4.png)
+![](screenshots/userDashboard1.png)
+![](screenshots/userDashboard2.png)
+![](screenshots/userDashboard3.png)
+![](screenshots/userDashboard4.png)
 
 ### About Us
 
 A static page providing information about the website, including its mission and values.
-![](screenshots\aboutUs.png)
+![](screenshots/aboutUs.png)
 
 ---
 

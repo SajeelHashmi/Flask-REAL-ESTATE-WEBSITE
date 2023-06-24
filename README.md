@@ -27,7 +27,7 @@ Here are some of the key pages and features of the Property Rent/Purchase Site:
 The home page provides an overview of the platform and showcases featured properties, testimonials, and encourages users to sign up.
 ![](screenshots\landing1.png)
 ![](screenshots\landing2.png)
-### Signup Pafe
+### Signup Page
 
 The signup page where a user can register and unlock many privileges
 ![](screenshots\signUp.png)

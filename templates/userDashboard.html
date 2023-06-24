@@ -1,0 +1,590 @@
+{% extends 'base.html' %}
+{% block body %}
+<style>
+
+</style>
+
+
+
+
+
+
+<!-- 
+  while displaying properties there are buttons of save make that 
+  unsave for saved properties and make it delete for your properties
+  and add the required logicS
+
+
+ -->
+
+<section class="sticky top-0 z-10 bg-secondary">
+
+    <div class="grid grid-cols-1 justify-center text-2xl">
+      <div class="my-5">
+        <h1 class="text-center text-primary text-3xl">Welcome {{data.name}}</h1>
+      </div>
+        <div class="flex justify-center">
+          
+       
+            </button>
+        </div>
+    </div>
+    <div class="flex justify-center">
+      <div>
+          <a href="#seller">
+
+            <button id="buyerBtn" class=" bg-primary  text-white border-2 border-accent my-3 text-2xl hover:bg-white hover:text-black transition-all duration-500 py-3 px-5 mx-2">
+              Seller
+            </button>
+          </a>
+        </div>
+ 
+        
+        <div>
+          <a href="#buyer">
+            <button id="sellerBtn" class="bg-primary mx-2  text-white border-2 border-accent my-3 text-2xl hover:bg-white hover:text-black transition-all duration-500 py-3 px-5 ">
+                Buyer
+            </button>
+        </a>
+          </div>
+          <div>
+            <a href="#nav">
+              <button class="bg-primary  text-white border-2 border-accent my-3 text-2xl hover:bg-white hover:text-black transition-all duration-500 py-3 px-5 mx-2">
+                &#8593;
+              </button>
+              </a>
+          </div>
+    </div>
+
+</section>
+<!-- add a button to remove saved property searches and uploaded property -->
+<section id="seller" class="mt-[1000px] min-h-[2000px]">
+  <div class="grid grid-cols-6 pt-40  gap-2">
+    <div
+      class="animatedHeading animation animationRight "
+    >
+      <h1 class="text-center text-4xl text-white">Seller</h1>
+    
+    </div>
+  </div>
+  <div class="mb-5">
+
+    <div class="text-4xl  text-primary underline m-4 ">
+      <h1>Your Properties</h1>
+    </div>
+    <div class="flex justify-center">
+      {% if sellerPropData %}
+        
+
+      {% for d in (sellerPropData) %}
+      
+      {% if loop.index < 5 %}
+              {% if loop.index % 4 == 0 %}
+              
+                </div><div class="flex justify-center mt-6">
+              {% endif %}
+      {% else %}
+            {% if (loop.index + 1) % 4 == 0 %}
+
+                </div><div class="flex justify-center mt-6">
+            {% endif %}
+      {% endif %}
+      <div class="card hover:w-[50%] flex bg-primary w-[20%] mx-4 transition-all ease-in-out duration-1000 h-[500px]">
+
+          <div class="bg-primary w-[100%] transition-all ease-in-out duration-1000 overflow-y-scroll">
+            <div class="image">
+              <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='data/' + d.baseImgUrl) }}" alt="">
+            </div>
+            <div class="title text-2xl text-center text-white px-2 border-y-2 border-white">
+  
+                FOR {{d.listing}} : {{d.price}} Rs
+            </div>
+            <div class="uploadDate text-white px-2 border-b-2 border-white ll">
+            {{d.uploadDate}}
+            </div>
+    
+            <div class="address text-white px-2 ">
+              {{d.address}}, {{d.location}}, {{d.city}} 
+          </div>
+        </div>
+          <div class="bg-primary w-0 transition-all text-white  ease-in-out duration-1000 opacity-0 overflow-y-scroll">
+            <div class=" pt-5 area border-white border-b">
+    
+              <span class="text-2xl pl-10">Area : {{d.area}}</span>
+              <span class="text-sm">sqft</span>
+            </div>
+            <div class=" pt-5 area border-white border-b">
+    
+              <span class="text-2xl pl-10">{{d.rooms}} Rooms</span>
+    
+            </div>
+            <div class=" pt-5 type border-white border-b">
+  
+              <span class="text-2xl pl-10">{{d.propType}} </span>
+    
+            </div>
+            <div class="desc pt-3">
+              <h1 class="text-center text-2xl underline" >
+               Description
+              </h1>
+              <h1 class="text-center px-4"> {{d.desc}}</h1>
+            </div>
+            <div class="pt-3 flex justify-center">
+  
+                <button data-id="{{d.id}}"  class="delPropBtn bg-accent mx-2 rounded-md py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                  Delete
+                </button>
+                <button class="bg-accent rounded-md mx-2 py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                  <a href="/property{{d.id}}" target="_blank" >
+                    View
+                  </a>
+                </button>
+            </div>
+
+            <div class="pt-3 flex justify-center">
+            <button class="bg-accent rounded-md mx-2 py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+              <a href="/editprop/{{d.id}}" target="_blank" >
+                edit
+              </a>
+            </button>
+          </div>
+    
+    
+          
+          </div>
+        </div>
+          <!-- Render your data here for each item -->
+          <!-- Use the item variable to access the data from the dictionary -->
+        {% endfor %}
+          
+        {% else %}
+        <div class="text-2xl my-52">
+
+          You do not have any properties as of now
+        </div>
+        {% endif %}
+      </div>
+
+    
+  </div>
+  <div class="flex justify-center m-4 mb-96">
+
+    <a href="/newproperty" target="_blank">
+      <button class="bg-primary  text-white border-2 border-accent my-3 text-2xl hover:bg-white hover:text-black transition-all duration-500 py-3 px-5 mx-2">
+        Add New
+      </button>
+    </a>
+  </div>
+
+</section>
+
+<section id="buyer" class="mt-[500px] min-h-[2000px]">
+  <div class="grid grid-cols-6 pt-40 gap-2">
+    <div
+      class="animatedHeading animation animationLeft"
+    >
+      <h1 class="text-center text-4xl text-white">Buyer</h1>
+    
+    </div>
+  </div>
+  <!-- Saved properties -->
+  <div class="mb-96">
+
+    <div class="text-4xl  text-primary underline m-4 ">
+      <h1>Your saved Properties</h1>
+    </div>
+    <div class="flex justify-center">
+      {% if savedPropData %}
+        
+
+      {% set counter = 0 %}
+      {% for d in (savedPropData) %}
+      
+      {% if loop.index < 5 %}
+      {% if loop.index % 4 == 0 %}
+      inside loop
+    </div><div class="flex justify-center mt-6">
+      {% endif %}
+{% else %}
+{% if (loop.index + 1) % 4 == 0 %}
+
+</div><div class="flex justify-center mt-6">
+{% endif %}
+{% endif %}              
+      <div class="card hover:w-[50%] flex bg-primary w-[20%] mx-4 transition-all ease-in-out duration-1000 h-[500px]">
+
+          <div class="bg-primary w-[100%] transition-all ease-in-out duration-1000 overflow-y-scroll">
+            <div class="image">
+              <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='data/' + d.baseImgUrl) }}" alt="">
+            </div>
+            <div class="title text-2xl text-center text-white px-2 border-y-2 border-white">
+  
+                FOR {{d.listing}} : {{d.price}} Rs
+            </div>
+            <div class="uploadDate text-white px-2 border-b-2 border-white ll">
+            {{d.uploadDate}}
+            </div>
+    
+            <div class="address text-white px-2 ">
+              {{d.address}}, {{d.location}}, {{d.city}} 
+          </div>
+        </div>
+          <div class="bg-primary w-0 transition-all text-white  ease-in-out duration-1000 opacity-0 overflow-y-scroll">
+            <div class=" pt-5 area border-white border-b">
+    
+              <span class="text-2xl pl-10">Area : {{d.area}}</span>
+              <span class="text-sm">sqft</span>
+            </div>
+            <div class=" pt-5 area border-white border-b">
+    
+              <span class="text-2xl pl-10">{{d.rooms}} Rooms</span>
+    
+            </div>
+            <div class=" pt-5 type border-white border-b">
+  
+              <span class="text-2xl pl-10">{{d.propType}} </span>
+    
+            </div>
+            <div class="desc pt-3">
+              <h1 class="text-center text-2xl underline" >
+               Description
+              </h1>
+              <h1 class="text-center px-4"> {{d.desc}}</h1>
+            </div>
+            <div class="desc pt-3 flex justify-center">
+  
+                <button data-id="{{d.id}}"  class="unSavePropBtn bg-accent mx-2 rounded-md py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                  Unsave
+                </button>
+                <button class="bg-accent rounded-md mx-2 py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                  <a href="/property{{d.id}}" target="_blank" >
+                    View
+                  </a>
+                </button>
+            </div>
+    
+    
+          
+          </div>
+        </div>
+          <!-- Render your data here for each item -->
+          <!-- Use the item variable to access the data from the dictionary -->
+          {% set counter = counter + 1 %}
+        {% endfor %}
+          
+        {% else %}
+        <div class="text-2xl my-9">
+
+          You do not have any saved properties as of now
+        </div>
+        {% endif %}
+      </div>
+
+  
+  
+      
+  
+    </div>
+
+    
+  </div>
+  <!-- Saved Searches -->
+  <div class="mb-8 ">
+  
+    <div class="text-4xl  text-primary underline m-4 ">
+      <h1>Your saved Searches</h1>
+    </div>
+
+          <div class="m-4">
+            {% if savedSearches %}
+            <ol class=" text-black text-2xl list-decimal list-inside ">
+              {% for s  in savedSearches %}
+                
+              <li>
+                
+                <span class="text-primary "><a target="_blank" href="{{s[0]}}"> {{s[0]}}</a> </span>      <button data-id="{{s[0]}}" class="removeSearchBtn bg-primary rounded-full text-white border-2 border-accent my-3 text-2xl hover:bg-white hover:text-black transition-all duration-500 py-3 px-5 mx-2">
+                  &#10005;                </button>
+              </li>
+            </ol>
+          </div>
+              {% endfor %}
+                
+              {% else %}
+              <div class="flex justify-center m-4 text-2xl  ">
+                you donot have any saved searches as of now
+              </div>
+                
+              {% endif %}
+
+    
+    
+  </div>
+<!-- Saved Alerts -->
+<div class="text-4xl  text-primary underline m-4 ">
+  <h1>Your saved Alerts</h1>
+</div>
+<div id ="alerts" class="m-4">
+  <ol class="text-black text-2xl list-decimal list-inside">
+    {% if alertData %}
+      {% for a in alertData %}
+        <li id="alert{{ a.id }}">
+          <div class="grid grid-cols-7 text-xl text-center">
+            <div class="border-primary border">
+              Price {{ a.name.priceBetween }}
+            </div>
+            <div class="border-primary border">
+              Area {{ a.name.areaBetween }}
+            </div>
+            <div class="border-primary border">
+              Rooms {{ a.name.roomsBetween }}
+            </div>
+            <div class="border-primary border">
+              for {{ a.name.listing }}
+            </div>
+            <div class="border-primary border">
+              Type {{ a.name.type }}
+            </div>
+            {% if a.name.city %}
+            <div class="border-primary border">
+              City {{ a.name.city }}
+            </div>
+            {% endif %}
+            {% if a.name.location %}
+            <div class="border-primary border">
+              Location {{ a.name.location }}
+            </div>
+            {% endif %}
+          </div>
+        </li>
+        <div class="flex justify-center my-4">
+          {% if a.prop %}
+            {% set counter = 0 %}
+            {% for d in a.prop %}
+              {% if loop.index < 5 %}
+                {% if loop.index % 4 == 0 %}
+                  <div class="flex justify-center mt-6">
+                {% endif %}
+              {% else %}
+                {% if (loop.index + 1) % 4 == 0 %}
+                  </div>
+                  <div class="flex justify-center mt-6">
+                {% endif %}
+              {% endif %}
+              <div class="card hover:w-[50%] flex text-sm bg-primary w-[20%] mx-4 transition-all ease-in-out duration-1000 h-[500px]">
+
+                <div class="bg-primary w-[100%] transition-all ease-in-out duration-1000 overflow-y-scroll">
+                  <div class="image">
+                    <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='data/' + d.baseImgUrl) }}" alt="">
+                  </div>
+                  <div class="title text-2xl text-center text-white px-2 border-y-2 border-white">
+        
+                      FOR {{d.listing}} : {{d.price}} Rs
+                  </div>
+                  <div class="uploadDate text-white px-2 border-b-2 border-white ll">
+                  {{d.uploadDate}}
+                  </div>
+          
+                  <div class="address text-white px-2 ">
+                    {{d.address}}, {{d.location}}, {{d.city}} 
+                </div>
+              </div>
+                <div class="bg-primary w-0 transition-all text-white  ease-in-out duration-1000 opacity-0 overflow-y-scroll">
+                  <div class=" pt-5 area border-white border-b">
+          
+                    <span class="text-2xl pl-10">Area : {{d.area}}</span>
+                    <span class="text-sm">sqft</span>
+                  </div>
+                  <div class=" pt-5 area border-white border-b">
+          
+                    <span class="text-2xl pl-10">{{d.rooms}} Rooms</span>
+          
+                  </div>
+                  <div class=" pt-5 type border-white border-b">
+        
+                    <span class="text-2xl pl-10">{{d.propType}} </span>
+          
+                  </div>
+                  <div class="desc pt-3">
+                    <h1 class="text-center text-2xl underline" >
+                     Description
+                    </h1>
+                    <h1 class="text-center px-4"> {{d.desc}}</h1>
+                  </div>
+                  <div class="desc pt-3 flex justify-center">
+        
+
+                      <button class="bg-accent rounded-md mx-2 py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                        <a href="/property{{d.id}}" target="_blank" >
+                          View
+                        </a>
+                      </button>
+                  </div>
+          
+          
+                
+                </div>
+              </div>
+              {% set counter = counter + 1 %}
+            {% endfor %}
+          {% else %}
+            <div class="text-2xl my-9">
+              This alert has returned no Properties as of now
+            </div>
+          {% endif %}
+        </div>
+        <div class="flex p-7">
+          <form action="/deleteAlert" method="post">
+            <input type="number" name="alertId" value="{{a.id}}" hidden>
+            <button type="submit" data-id="{{a.id}}"  class=" bg-primary mx-2 rounded-md py-2 px-4 text-secondary hover:bg-accent hover:text-secondary transition-all ease-in-out duration-200 text-2xl">
+                Delete Alert
+              </button>
+
+          </form>
+          <form action="/checkForPropAlert" method="post">
+            <input type="number" name="alertId" value="{{a.id}}" hidden>
+            <button data-id="{{a.id}}"  class=" bg-primary mx-2 rounded-md py-2 px-4 text-secondary hover:bg-accent hover:text-secondary transition-all ease-in-out duration-200 text-2xl">
+              Check for Properties
+            </button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="flex justify-center m-4 text-2xl">
+        You don't have any saved alerts as of now
+      </div>
+    {% endif %}
+  </ol>
+</div>
+
+</section>
+
+
+
+
+<script>
+    // script same for landing can be modularized in a static file
+
+    document.querySelectorAll('.unSavePropBtn').forEach(function(button) {
+  button.addEventListener('click', async function() {
+    // Access the data-id attribute
+    var id = button.dataset.id;
+    console.log(id)
+
+    // Create the payload for the POST request
+    var payload = {
+      id: id
+    };
+
+    try {
+      // Perform the POST request
+      const response = await fetch('/unsaveProp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      
+        const data = await response.text(); // Get the response as text
+        alert(data); // Display the response as an alert
+     
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  });
+});
+
+
+
+document.querySelectorAll('.delPropBtn').forEach(function(button) {
+  button.addEventListener('click', async function() {
+    console.log("btnClicked")
+    // Access the data-id attribute
+    var id = button.dataset.id;
+    console.log(id)
+
+    // Create the payload for the POST request
+    var payload = {
+      id: id
+    };
+
+    try {
+      // Perform the POST request
+      const response = await fetch('/delProp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      
+        const data = await response.text(); // Get the response as text
+        alert(data); // Display the response as an alert
+     
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  });
+});
+
+
+
+
+
+document.querySelectorAll('.removeSearchBtn').forEach(function(button) {
+  button.addEventListener('click', async function() {
+    // Access the data-id attribute
+    var id = button.dataset.id;
+    console.log(id)
+
+    // Create the payload for the POST request
+    var payload = {
+      id: id
+    };
+
+    try {
+      // Perform the POST request
+      const response = await fetch('/delSearch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+
+        const data = await response.text(); // Get the response as text
+        // console.log()
+        alert(data); // Display the response as an alert
+     
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+   
+   
+    
+  </script>
+{% endblock body %}

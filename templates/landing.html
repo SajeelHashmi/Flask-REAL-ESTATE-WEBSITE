@@ -1,0 +1,225 @@
+{% extends 'base.html' %} {% block body %}
+<section >
+  <div
+    class="min-w-full overflow-x-hidden bg-primary grid grid-cols-2 gap-0 text-white"
+  >
+    <div class="my-12 mx-8 p-4">
+      <h1 class="text-5xl">A radically different way to buy and sell a home</h1>
+
+      <p class="text-lg my-12">
+        Wherever you are in your real estate journey, our team of experts will
+        provide you with the education, guidance and technology you need, all in
+        one place.
+      </p>
+      <a href="/signup">
+        
+        <button
+        class="bg-accent border-secondary border-2 rounded-full text-4xl p-6 hover:bg-secondary hover:border-accent hover:text-primary transition delay-150 duration-300 ease-in-out"
+        >
+        Sign Up Today
+      </button>
+    </a>
+    </div>
+    <!-- immg size 768*432 704*336 -->
+    <div class="overflow-hidden relative border-white border-l-2">
+      <img
+        class="slides active"
+        src="{{ url_for('static', filename='images/house1.jpg') }}"
+        alt
+      />
+      <img
+        class="slides"
+        src="{{ url_for('static', filename='images/house2.jpg') }}"
+        alt
+      />
+      <img
+        class="slides"
+        src="{{ url_for('static', filename='images/house3.jpg') }}"
+        alt
+      />
+    </div>
+  </div>
+</section>
+<!-- section for newest properties add place holder red colored divs or something like that -->
+
+<!-- image will be square with classs w-full
+feature of properties
+
+upload date primary
+listing type primary
+city primary location primary address primary will be in one div
+price primary
+Description secondary
+area secondary
+owner_name secondary
+ -->
+<section class="">
+  <div class="grid grid-cols-6 mt-48 gap-2">
+    <div
+      class="animatedHeading animation animationLeft"
+    >
+      <h1 class="text-center text-4xl text-white">Featured Properties</h1>
+    
+    </div>
+  </div>
+  <!-- #include <iostream>
+
+int main() {
+    for (int i = 9; i > 0; i -= 3) {
+        std::cout << "make new div"  << std::endl;
+
+        if (i < 3) {
+            for (int k = 0; k < i; k++) {
+                std::cout << "k" << k << std::endl;
+            }
+        } else {
+            for (int j = 0; j < 3; j++) {
+                std::cout << "j" << j << std::endl;
+            }
+        }
+    }
+
+    return 0;
+}
+this for loop will be used to display three properties per line
+this loop wont be neccessary here because only top three properties will be recieved here-->
+
+  <div class="flex justify-center">
+
+    {% for d in Propdata  %}
+    <div class=" card hover:w-[50%] flex bg-primary w-[20%] mx-4 transition-all ease-in-out duration-1000 h-[500px]">
+      <div class="bg-primary w-[100%] transition-all ease-in-out duration-1000 overflow-y-scroll">
+        <div class="image">
+          <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='data/' + d.baseImgUrl) }}" alt="">
+        </div>
+        <div class="title text-2xl text-center text-white px-2 border-y-2 border-white">
+          FOR {{d.listing}} : {{d.price}} Rs
+        </div>
+        <div class="uploadDate text-white px-2 border-b-2 border-white ll">
+        {{d.uploadDate}}
+        </div>
+
+        <div class="address text-white px-2 ">
+          {{d.address}}, {{d.location}}, {{d.city}} 
+      </div>
+    </div>
+      <div class="bg-primary w-0 transition-all text-white  ease-in-out duration-1000 opacity-0 overflow-y-scroll">
+        <div class=" pt-5 area border-white border-b">
+
+          <span class="text-2xl pl-10">Area : {{d.area}}</span>
+          <span class="text-sm">sqft</span>
+        </div>
+        <div class=" pt-5 area border-white border-b">
+
+          <span class="text-2xl pl-10">{{d.rooms}} Rooms</span>
+
+        </div>
+        <div class=" pt-5 type border-white border-b">
+  
+          <span class="text-2xl pl-10">{{d.propType}} </span>
+
+        </div>
+        <div class="desc pt-3">
+          <h1 class="text-center text-2xl underline" >
+           Description
+          </h1>
+          <h1 class="text-center px-4"> {{d.desc}}</h1>
+        </div>
+        <div class="desc pt-3 flex justify-center">
+
+          <button id="save" class="bg-accent mx-2 rounded-md py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+            Save
+          </button>
+          <button class="bg-accent rounded-md mx-2 py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+            <a href="/property{{d.id}}" target="_blank" >
+              View
+            </a>
+          </button>
+      </div>
+
+
+      </div>
+
+      
+    </div >
+
+    {% endfor %}
+  
+
+    
+
+  </div>
+  <div class="flex justify-center m-4 mb-96">
+
+    <a href="/explore" target="_blank">
+      <button class="bg-primary  text-white border-2 border-accent my-3 text-2xl hover:bg-white hover:text-black transition-all duration-500 py-3 px-5 mx-2">
+        View All
+      </button>
+    </a>
+  </div>
+</div>
+
+
+</section>
+<section">
+  <div class="grid grid-cols-6 mt-48 gap-2">
+    <div
+      class="animatedHeading animation animationLeft"
+    >
+      <h1 class="text-center text-4xl text-white">Testimonials</h1>
+    
+    </div>
+  </div>
+  <div class="flex justify-center mb-32">
+
+    <div class="mx-3 w-1/3">
+  
+      <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='images/testimonial1.jpg') }}" alt="">
+      <div class="bg-secondary text-center border border-primary text-primary">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, culpa dolor, exercitationem nam dicta maxime eos, ut aliquam veniam cumque doloribus porro? Perspiciatis commodi neque accusamus officia excepturi nobis, dolor deleniti eveniet dolore inventore, pariatur saepe repellendus quas minima consequuntur delectus ea eos illo. Iure totam molestias possimus alias doloremque.
+      </div>
+    </div>
+    <div class="mx-3 w-1/3">
+  
+      <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='images/testimonial2.jpg') }}" alt="">
+      <div class="bg-secondary text-center border border-primary text-primary">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, culpa dolor, exercitationem nam dicta maxime eos, ut aliquam veniam cumque doloribus porro? Perspiciatis commodi neque accusamus officia excepturi nobis, dolor deleniti eveniet dolore inventore, pariatur saepe repellendus quas minima consequuntur delectus ea eos illo. Iure totam molestias possimus alias doloremque.
+      </div>
+    </div>
+    <div class="mx-3 w-1/3">
+  
+      <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='images/testimonial3.jpg') }}" alt="">
+      <div class="bg-secondary text-center border border-primary text-primary">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, culpa dolor, exercitationem nam dicta maxime eos, ut aliquam veniam cumque doloribus porro? Perspiciatis commodi neque accusamus officia excepturi nobis, dolor deleniti eveniet dolore inventore, pariatur saepe repellendus quas minima consequuntur delectus ea eos illo. Iure totam molestias possimus alias doloremque.
+      </div>
+    </div>
+  </div>
+
+
+</section>
+<script>
+
+  // expand and contract testing for featured div
+
+
+
+  // slider with properties
+  const slides = document.querySelectorAll(".slides");
+  let active = 0;
+  async function slide() {
+    slides.forEach((slide) => {
+      slide.classList.remove("active");
+    });
+    slides[active].classList.add("active");
+    active++;
+    active = active % 3;
+  }
+  setInterval(() => {
+    slide();
+  }, 5000);
+ 
+ 
+  // scroll animations slide in slide out
+
+</script>
+{% endblock%}

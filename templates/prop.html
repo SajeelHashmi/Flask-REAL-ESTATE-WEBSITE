@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block body %}
+
+{% if propInfo %}
+<!-- image div -->
+<div class="flex justify-center my-9 h-[500px]">
+    <img class="h-full border-primary border " src="{{ url_for('static', filename='data/' + propInfo.baseImgUrl) }}" alt="">
+</div>
+<!-- information div -->
+<div class="p-10">
+    <h1 class="text-center text-5xl underline text-primary mb-8">Description </h1> <span class="text-3xl text-black"> {{propInfo.desc}}</span>
+</div>
+<div class="p-10 mt-28">
+    <h1 class="text-center text-5xl underline text-primary mb-8">More details </h1>
+</div>
+<div class="grid grid-cols-4">
+
+    <div class="p-10 text-2xl text-black">
+        <span>For </span> <span class=""> {{propInfo.listing}}</span>
+    </div>
+    <div class="p-10 text-2xl text-black">
+        Price  <span class=""> {{propInfo.price}} Rs</span>
+    </div>
+    <div class="p-10 text-2xl text-black">
+        Area  <span class=""> {{propInfo.area}}</span> <span>sqFt</span>
+    </div>
+    <div class="p-10 text-2xl text-black">
+        <span>Rooms </span> <span class=""> {{propInfo.rooms}}</span>
+    </div>
+</div>
+
+
+
+<div class="grid grid-cols-4">
+
+    <div class="p-10 text-2xl text-black">
+        <span>Listed on </span> <span class=""> {{propInfo.uploadDate}}</span>
+    </div>
+    <div class="p-10 text-2xl col-span-2 text-black">
+        <span class="">Address: {{propInfo.address}}</span> <span class=""> {{propInfo.location}}</span> <span class=""> {{propInfo.city}}</span>
+    </div>
+    <div class="p-10 text-2xl text-black">
+         &#9742  <span class=""> {{propInfo.ownerContact}} </span>
+    </div>
+
+    
+</div>
+<div class="flex p-7">
+
+    <button data-id="{{propInfo.id}}"  class="savePropBtn bg-primary mx-2 rounded-md py-2 px-4 text-secondary hover:bg-accent hover:text-secondary transition-all ease-in-out duration-200 text-2xl">
+        Save
+      </button>
+</div>
+
+
+{% else %}
+    sorry this page doesnot exist
+{% endif %}
+<script>
+    document.querySelectorAll('.savePropBtn').forEach(function(button) {
+  button.addEventListener('click', async function() {
+    // Access the data-id attribute
+    var id = button.dataset.id;
+    console.log(id)
+
+    // Create the payload for the POST request
+    var payload = {
+      id: id
+    };
+
+    try {
+      // Perform the POST request
+      const response = await fetch('/saveProperty', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      
+        const data = await response.text(); // Get the response as text
+        alert(data); // Display the response as an alert
+     
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  });
+});
+
+</script>
+{% endblock%}

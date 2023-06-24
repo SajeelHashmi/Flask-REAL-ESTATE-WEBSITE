@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+input{
+    @apply text-black
+}
+.animatedHeading{
+  @apply  my-24 col-start-3 col-span-2 bg-primary rounded-2xl min-h-[150px] flex flex-col justify-center
+}
+  .slides {
+    transform: translateX(200px);
+    @apply absolute transition-all duration-1000 ease-in-out opacity-0
+
+  }
+  .active {
+    
+    transform: translateX(0);
+    @apply opacity-100
+  }
+  .animationLeft {
+    transform: translateX(-250px);
+    @apply transition-all duration-1000 ease-in-out opacity-0 
+  }
+  .animationRight {
+    transform: translateX(250px);
+    @apply transition-all duration-1000 ease-in-out opacity-0 
+  }
+  .scrollAnimation {
+      transform: translateX(0);
+    @apply opacity-100
+  }
+  .card:hover > div{
+    @apply max-w-full w-full block opacity-100
+  }
+
+
+  .suggestionInput:focus ~ .suggestions,
+.suggestions:hover {
+  @apply block
+}
+
+#citySuggestions li {
+  cursor: pointer;
+}
+
+#citySuggestions li:hover {
+  background-color: lightgray;
+} 
+
+
+
+

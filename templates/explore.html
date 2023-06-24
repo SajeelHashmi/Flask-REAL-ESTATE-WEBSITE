@@ -1,0 +1,554 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+<style>
+  .hideFormPopUp {
+    display: none; /* Initially hide the roomPopUp div */
+    /* Add your desired styles here */
+  }
+  
+  .showFormPopUp {
+    display: grid; /* Show the roomPopUp div when the 'show' class is added */
+  }
+</style>
+
+<!-- fix pop up positions -->
+<!-- 
+  form update
+  location and city inputs are working fine 
+  make on click of price button to show the price div for setting min max price
+  same for area button
+  after that our form will be complete
+ -->
+<section class="text-xl py-4 border-accent border-2 bg-primary text-white mb-5">
+  <!-- 
+      drop down for all major cities we will start with lahore islamabad and karachi
+      all locations for each of the cities will be saved either in the database e.g
+      islamabad will have locations g-10 g-11/1,2,3,4 etc
+      listing type will also be a form element it will be a radio button with options for rent for sale
+      min max price will also be avialiable lets make them simple number fields
+      min max area will also be avialiable similar to the number field 
+      view can be changed from marla to square fee or another other unit of measurement
+      maybe we will enter a number of bedrooms or type attribute 
+
+
+
+
+
+      the form in tests/form.html will be used to get the desired functionality in property filter form
+      we will retrieve valid cities from the server and when a city is selected we will
+      retrive possibble locations for that city 
+      our database design will be updated to include a locations and city field
+      our database will have to be updated to contain a cities table and a locations table
+      our database could be updated to store number of rooms
+
+      make it soo that the locations can be more than one i think it would be checkbox instead of text
+
+   -->
+  <form id="searchForm" method="get"  >
+  
+    <div class="grid grid-cols-7 items-end justify-items-center ">
+      <div id="cityDiv" class="col-span-1">
+        <label class="block  text-secondary" for="city">City:</label>
+        <select class="bg-secondary hover:bg-accent text-primary px-8 py-2 rounded-lg  transition-all ease-linear duration-200" id="city" name="city">
+          <option class="bg-secondary" value="" selected>ANY</option>
+        </select>
+      </div>
+      <div id="locationDiv" class="col-span-1">
+        <label class="block  text-secondary" for="location">Location:</label>
+        <select class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200 " id="location" name="location">
+          <option value="" selected>ANY</option>
+        </select>
+
+      </div>
+      <div id="listingDiv" class="col-span-1">
+        <label class="block  text-secondary" for="listing">Listing Type</label>
+        <select class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200 " id="listing" name="listing">
+          <option selected  value="">Both</option>
+          <option value="RENT">Rent</option>
+          <option value="SALE">Buy</option>
+        </select>
+
+      </div>
+      <div id="typeDiv" class="col-span-1">
+        <label class="block  text-secondary" for="typeDiv">Type</label>
+        <select class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200 " id="propType" name="propType">
+          <option selected  value="">All</option>
+          <option value="house">House</option>
+          <option value="apartment">Apartment</option>
+          <option value="comercial">Comercial</option>
+        </select>
+
+      </div>
+      
+      <div class="col-span-1">
+        <label class="block  text-secondary" for="after">After Date</label>
+        <input type="date" class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200" name="after">
+      </div>
+    
+    <div id="priceDiv" class="col-span-1  ">
+      <button type="button" class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200" id="priceBtn">Price</button>
+      <div id="pricePopUp" class="grid bg-secondary justify-center items-center grid-cols-2  hideFormPopUp text-primary absolute   rounded-lg p-2">
+        <div class="col-span-1 text-center border-accent border m-1 w-40">
+          Min price
+        </div>
+        <div class="col-span-1 text-center border-accent border m-1 w-40">
+          Max price
+        </div>
+      <div class="minRoom">
+      <input type="number" class="w-40" name="minPrice" id="">
+      </div>
+      <div class="maxRooms">
+      <input type="number" class="w-40" name="maxPrice" id="">
+      </div>
+      </div>
+    </div>
+      <div id="areaDiv" class="col-span-1">
+        <button type="button" id="areaBtn" class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200">Area</button>
+        <div id="areaPopUp" class="grid bg-secondary justify-center items-center grid-cols-2  hideFormPopUp text-primary absolute left-[76.5vw]   rounded-lg p-2">
+          <div class="col-span-1 text-center border-accent border m-1 w-40">
+            Min Area
+          </div>
+          <div class="col-span-1 text-center border-accent border m-1 w-40">
+            Max Area
+          </div>
+        <div class="minRoom">
+        <input type="number" class="w-40" name="minArea" id="">
+        </div>
+        <div class="maxRooms">
+        <input type="number" class="w-40" name="maxArea" id="">
+        </div>
+        </div>
+      </div>
+      <div id="roomDiv" class="col-span-1 justify-self-center self-center   ">
+        <button id="roomBtn" type="button" class="bg-secondary text-primary px-8 py-2 rounded-lg hover:bg-accent transition-all ease-linear duration-200">Rooms</button>
+        <div id="roomPopUp" class="grid bg-secondary justify-center items-center grid-cols-2  hideFormPopUp text-primary absolute  rounded-lg p-2">
+          <div class="col-span-1 text-center border-accent border m-1 w-40">
+            Min rooms
+          </div>
+          <div class="col-span-1 text-center border-accent border m-1 w-40">
+            Max rooms
+          </div>
+        <div class="minRoom">
+        <input type="number" class="w-40" name="minRooms" id="">
+        </div>
+        <div class="maxRooms">
+        <input type="number" class="w-40" name="maxRooms" id="">
+        </div>
+        </div>
+      </div>
+      <div class="py-8 col-span-2 w-full flex justify-center">
+
+        <button type="submit" class="bg-accent   rounded-md text-white w-1/2 hover:bg-secondary hover:text-primary transition-all duration-200  p-2">Search</button>
+      </div>
+      <div class="py-8 col-span-2 w-full flex justify-center" >
+        <button type="button" id="saveSearch" class="bg-accent  text-white p-2 rounded-md w-1/2 hover:bg-secondary hover:text-primary transition-all duration-200" >Save Search</button>
+
+      </div>
+      <div class="py-8 col-span-2 w-full flex justify-center" >
+        <button type="button" id="saveAlert" class="bg-accent  text-white p-2 rounded-md w-1/2 hover:bg-secondary hover:text-primary transition-all duration-200" >Create Alert</button>
+
+      </div>
+    </div>
+  </form>
+
+
+</section>
+<section class="my-32 min-h-[1000px]">
+  
+  
+  
+  <div class="flex justify-center mt-6">
+    {% for d in (propData[:15]) %}
+    {% if loop.index < 5 %}
+          {% if loop.index % 4 == 0 %}
+        </div><div class="flex justify-center mt-6">
+          {% endif %}
+    {% else %}
+    {% if (loop.index + 1) % 4 == 0 %}
+    
+  </div><div class="flex justify-center mt-6">
+    {% endif %}
+    {% endif %}
+
+    <div class="card hover:w-[50%] flex bg-primary w-[20%] mx-4 transition-all ease-in-out duration-1000 h-[500px]">
+        <div class="bg-primary w-[100%] transition-all ease-in-out duration-1000 overflow-y-scroll">
+          <div class="image">
+            <img class="mx-auto w-full min-h-[300px] " src="{{ url_for('static', filename='data/' + d.baseImgUrl) }}" alt="">
+          </div>
+          <div class="title text-2xl text-center text-white px-2 border-y-2 border-white">
+
+              FOR {{d.listing}} : {{d.price}} Rs 
+          </div>
+          <div class="uploadDate text-white px-2 border-b-2 border-white ll">
+          {{d.uploadDate}} 
+          </div>
+  
+          <div class="address text-white px-2 ">
+            {{d.address}}, {{d.location}}, {{d.city}} 
+        </div>
+      </div>
+        <div class="bg-primary w-0 transition-all text-white  ease-in-out duration-1000 opacity-0 overflow-y-scroll">
+          <div class=" pt-5 area border-white border-b">
+  
+            <span class="text-2xl pl-10">Area : {{d.area}}</span>
+            <span class="text-sm">sqft</span>
+          </div>
+          <div class=" pt-5 area border-white border-b">
+  
+            <span class="text-2xl pl-10">{{d.rooms}} Rooms</span>
+  
+          </div>
+          <div class=" pt-5 type border-white border-b">
+  
+            <span class="text-2xl pl-10">{{d.propType}} </span>
+  
+          </div>
+          <div class="desc pt-3">
+            <h1 class="text-center text-2xl underline" >
+             Description
+            </h1>
+            <h1 class="text-center px-4"> {{d.desc}}</h1>
+          </div>
+          <div class="desc pt-3 flex justify-center">
+
+              <button data-id="{{d.id}}"  class="savePropBtn bg-accent mx-2 rounded-md py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                Save
+              </button>
+              <button class="bg-accent rounded-md mx-2 py-2 px-4 text-secondary hover:bg-secondary hover:text-accent transition-all ease-in-out duration-200 text-2xl">
+                <a href="/property{{d.id}}" target="_blank" >
+                  View
+                </a>
+              </button>
+          </div>
+  
+  
+        
+        </div>
+      </div>
+        <!-- Render your data here for each item -->
+        <!-- Use the item variable to access the data from the dictionary -->
+      {% endfor %}
+    </div>
+    
+    <div class="flex justify-around mt-32 ">
+     
+        
+     
+      <button id="prevBtn" id="prevBtn" {% if data.currentPage == 0 %} disabled  {% endif %} class="disabled:bg-secondary disabled:text-primary bg-primary rounded-lg  text-secondary border-2 border-accent my-3 text-2xl hover:bg-accent hover:text-primary transition-all duration-500 py-5 px-10 mx-2">
+
+          
+          &#8592; Previous
+        <button id="nextBtn" {% if data.currentPage+1  == data.totalPage %} disabled  {% endif %} class="disabled:bg-secondary disabled:text-primary  bg-primary rounded-lg text-secondary border-2 border-accent my-3 text-2xl hover:bg-accent hover:text-primary transition-all duration-500 py-5 px-10 mx-2">
+
+          
+          Next &#8594; 
+        </button>
+    </div>
+</section>
+<script>
+
+
+
+
+let currentPage = {{data.currentPage}}
+let totalPage = {{data.totalPage}}
+const previousButton = document.getElementById('prevBtn');
+const nextButton = document.getElementById('nextBtn');
+console.log(nextButton)
+nextButton.addEventListener('click',()=>
+{
+  console.log("btn clicked")
+  let nextPage = currentPage + 1;
+  const queryParams = getQueryParams(window.location.href);
+    console.log(queryParams);
+    var next = 'explore/' + nextPage
+    console.log(next)
+    url = (buildUrl(nextPage, queryParams))
+    console.log(url)
+    window.location.href = url
+
+})
+previousButton.addEventListener('click',()=>
+{
+  console.log("btn clicked")
+  let prevPage = currentPage - 1;
+  const queryParams = getQueryParams(window.location.href);
+    console.log(queryParams);
+    // var next = 'explore/' + nextPage
+    // console.log(next)
+    url = (buildUrl(prevPage, queryParams))
+    console.log(url)
+    window.location.href = url
+
+})
+
+
+// updatePagination();
+ function getQueryParams(url) {
+    var queryParams = {};
+    var paramIndex = url.indexOf('?');
+    if (paramIndex !== -1) {
+      var paramString = url.slice(paramIndex + 1);
+      var params = paramString.split('&');
+      params.forEach(function (param) {
+        var [key, value] = param.split('=');
+        queryParams[key] = value;
+      });
+    }
+    return queryParams;
+  }
+
+  // Function to build URL with query parameters
+  function buildUrl(url, queryParams) {
+    var queryString = Object.keys(queryParams)
+      .map(key => `${key}=${queryParams[key]}`)
+      .join('&');
+      console.log(queryString)
+      console.log(`${url}?${queryString}`)
+    return `${url}?${queryString}`;
+  }
+
+
+// nextButton.addEventListener
+
+  // function updatePagination()
+
+  // {
+  //   let previousPage = currentPage - 1;
+  //   let nextPage = currentPage + 1;
+
+
+  //   const queryParams = getQueryParams(window.location.href);
+  //   console.log(queryParams);
+  // //   nextPage
+  // //  previousPage
+  //   // console.log(x)
+  //   // console.log(next)
+  //   console.log((buildUrl(nextPage, queryParams)))
+  //   nextButton.href = (buildUrl(nextPage, queryParams))
+  //   console.log(nextButton.href)
+  //   previousButton.href = (buildUrl(previousPage, queryParams))
+  //   // previousButton.href = buildUrl(window.location.pathname, queryParams);
+
+
+
+  // }
+
+
+
+
+
+
+document.querySelectorAll('.savePropBtn').forEach(function(button) {
+  button.addEventListener('click', async function() {
+    // Access the data-id attribute
+    var id = button.dataset.id;
+    console.log(id)
+
+    // Create the payload for the POST request
+    var payload = {
+      id: id
+    };
+
+    try {
+      // Perform the POST request
+      const response = await fetch('/saveProperty', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      
+        const data = await response.text(); // Get the response as text
+        alert(data); // Display the response as an alert
+     
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  });
+});
+
+
+const cityDropdown = document.getElementById('city');
+const locationDropdown = document.getElementById('location');
+// Function to fetch the JSON data
+function fetchData() {
+  fetch('/getCityLocation')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      // Populate the city dropdown
+      for (var city in data) {
+        var option = document.createElement('option');
+        option.text = city;
+        cityDropdown.add(option);
+      }
+
+      // Populate the location dropdown based on the selected city
+      cityDropdown.addEventListener('change', function() {
+        var selectedCity = cityDropdown.value;
+        var locations = data[selectedCity];
+
+        // Clear the location dropdown
+        locationDropdown.innerHTML = '';
+
+        var option =document.createElement('option');
+        option.text = 'ANY';
+        option.value = ''
+        locationDropdown.add(option);
+        // Populate the location dropdown
+        for (var i = 0; i < locations.length; i++) {
+          var option = document.createElement('option');
+          option.text = locations[i];
+          locationDropdown.add(option);
+        }
+
+      });
+    })
+    .catch(function(error) {
+      console.log('Error:', error);
+    });
+}
+
+// Call the fetchData function to populate the dropdowns
+fetchData();
+
+
+const priceBtn = document.getElementById('priceBtn')
+const areaBtn = document.getElementById('areaBtn')
+const roomBtn = document.getElementById('roomBtn')
+
+
+const pricePopUp = document.getElementById("pricePopUp")
+const areaPopUp = document.getElementById("areaPopUp")
+const roomPopUp = document.getElementById("roomPopUp")
+
+
+priceBtn.addEventListener('click',()=>
+{
+  if (pricePopUp.classList.contains('hideFormPopUp')) {
+    pricePopUp.classList.remove('hideFormPopUp');
+    pricePopUp.classList.add('showFormPopUp');
+  } else {
+    pricePopUp.classList.remove('showFormPopUp');
+    pricePopUp.classList.add('hideFormPopUp');
+  }
+
+})
+areaBtn.addEventListener('click',()=>
+{
+  if (areaPopUp.classList.contains('hideFormPopUp')) {
+    areaPopUp.classList.remove('hideFormPopUp');
+    areaPopUp.classList.add('showFormPopUp');
+  } else {
+    areaPopUp.classList.remove('showFormPopUp');
+    areaPopUp.classList.add('hideFormPopUp');
+  }
+
+})
+roomBtn.addEventListener('click', () => {
+  if (roomPopUp.classList.contains('hideFormPopUp')) {
+    roomPopUp.classList.remove('hideFormPopUp');
+    roomPopUp.classList.add('showFormPopUp');
+  } else {
+    roomPopUp.classList.remove('showFormPopUp');
+    roomPopUp.classList.add('hideFormPopUp');
+  }
+});
+
+function isDescendant(element, ancestor) {
+  let currentElement = element;
+  while (currentElement !== null) {
+    if (currentElement === ancestor) {
+      return true;
+    }
+    currentElement = currentElement.parentElement;
+  }
+  return false;
+}
+
+// Add 'click' event listener to the document
+document.addEventListener('click', (event) => {
+  // Check if the clicked element is within the pricePopUp or its associated button
+  if (!isDescendant(event.target, pricePopUp) && event.target !== priceBtn) {
+    pricePopUp.classList.remove('showFormPopUp');
+    pricePopUp.classList.add('hideFormPopUp');
+  }
+
+  // Check if the clicked element is within the areaPopUp or its associated button
+  if (!isDescendant(event.target, areaPopUp) && event.target !== areaBtn) {
+    areaPopUp.classList.remove('showFormPopUp');
+    areaPopUp.classList.add('hideFormPopUp');
+  }
+
+  // Check if the clicked element is within the roomPopUp or its associated button
+  if (!isDescendant(event.target, roomPopUp) && event.target !== roomBtn) {
+    roomPopUp.classList.remove('showFormPopUp');
+    roomPopUp.classList.add('hideFormPopUp');
+  }
+});
+
+
+
+
+
+  // Function to send the current page URL to the saveSearch endpoint
+  function sendPageUrl() {
+    var currentUrl = window.location.href;
+    var formData = new FormData();
+    formData.append('url', currentUrl);
+
+    fetch('/saveSearch', {
+      method: 'POST',
+      body: formData
+    })
+    .then(function(response) {
+      if (response.ok) {
+        return response.text(); // Return the response as text
+      } else {
+        throw new Error('Failed to save search. Please try again.');
+      }
+    })
+    .then(function(data) {
+      alert(data); // Display success message
+    })
+    .catch(function(error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    });
+  }
+
+  // Add event listener to the button with ID 'saveButton'
+  document.getElementById('saveSearch').addEventListener('click', sendPageUrl);
+  document.getElementById('saveAlert').addEventListener('click', function() {
+  // Get the form data
+  var searchForm = document.getElementById('searchForm');
+  var formData = new FormData(searchForm);
+
+  // Send the form data via a POST request to the saveAlert endpoint
+  fetch('/saveAlert', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())  // Extract the response as text
+  .then(responseText => {
+    alert(responseText);  // Display the response as an alert
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred. Please try again.');
+  });
+});
+
+
+
+
+
+</script>
+{% endblock body %}

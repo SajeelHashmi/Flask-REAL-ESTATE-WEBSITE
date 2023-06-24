@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+
+
+<!-- Image update from -->
+<div class="grid grid-cols-2 border-b border-primary">
+
+    
+    
+<div class="content-center justify-items-center grid grid-cols-1 items-center">
+    <form id="updateImg" enctype="multipart/form-data" class="max-w-md">
+        <div class="mb-4">
+            <label for="baseImg" class="block mb-1 text-secondary">Base Image (1:1 Aspect Ratio)</label>
+            <input required type="file" id="baseImg" name="baseImg" accept="image/*" class="border border-secondary p-2 w-full">
+            <div id="baseImgPreview" class="mt-2"></div>
+          <input type="hidden" id="baseImgCropped" name="baseImgCropped">
+        </div>
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+    </form>
+</div>
+
+<div class="content-center justify-items-center grid grid-cols-1 items-center">
+    <img class="min-h-[300px]" src="{{ url_for('static', filename='data/' + propInfo.baseImgUrl) }}" alt="">
+</div>
+</div>
+
+<div class="m-8 text-2xl text-primary">
+  <!-- form to update listing type -->
+  <form class="border-b border-primary pt-6" action="/updateListing" method="post" id="listing">
+    <div class="grid grid-cols-2 justify-center">
+  <div>
+    <input type="number" name="id" hidden value="{{propInfo.id}}">
+
+  <label for="listingType" class="mb-5 block  text-primary">Listing Type</label>
+  <select required id="listingType" name="listing" class="border border-primary p-2 w-full">
+    <option value="SALE">For Sale</option>
+    <option value="RENT">For Rent</option>
+  </select>
+
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+  </div>
+  <div>
+    <h1 class=" mb-5 text-center">Current Listing Type</h1>
+    <p class="text-center">{{propInfo.listing}}</p>
+  </div>
+    </div>
+  </form>
+
+  <!-- form to update price -->
+    <form class="border-b border-primary pt-6" action="/updatePrice" method="post" id="price">
+    <div class="grid grid-cols-2 justify-center">
+  <div>
+    <input type="number" name="id" hidden value="{{propInfo.id}}">
+
+  <label for="price" class=" block mb-5 text-primary">Price</label>
+  <input required type="number" id="price" name="price" min="0" class="border border-primary p-2 w-full">
+
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+  </div>
+  <div>
+    <h1 class=" mb-5 text-center">Current Price</h1>
+    <p class="text-center">{{propInfo.price}}</p>
+  </div>
+    </div>
+  </form>
+  <!-- form to update area -->
+  <form class="border-b border-primary pt-6" action="/updateArea" method="post" id="area">
+    <div class="grid grid-cols-2 justify-center">
+  <div>
+    <input type="number" name="id" hidden value="{{propInfo.id}}">
+  <label for="area" class="block mb-5 text-primary">Area</label>
+  <input required type="number" id="area" name="area" min="0" class="border border-primary p-2 w-full">
+
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+  </div>
+  <div>
+    <h1 class="mb-5 text-center">Current Area</h1>
+    <p class="text-center">{{propInfo.area}} sqft</p>
+  </div>
+    </div>
+  </form>
+  <!-- form to update rooms -->
+  <form class="border-b border-primary pt-6" action="/updateRooms" method="post" id="price">
+    <div class="grid grid-cols-2 justify-center">
+  <div>
+    <input type="number" name="id" hidden value="{{propInfo.id}}">
+
+  <label for="rooms" class="block mb-5 text-primary">Rooms</label>
+  <input required type="number" id="rooms" name="rooms" min="0" class="border border-primary p-2 w-full">
+
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+  </div>
+  <div>
+    <h1 class="mb-5 text-center">Current number of rooms</h1>
+    <p class="text-center">{{propInfo.rooms}}</p>
+  </div>
+    </div>
+  </form>
+  <form class="border-b border-primary pt-6" action="/updateAddress" method="post" id="price">
+    <div class="grid grid-cols-2 justify-center">
+  <div>
+    <input type="number" name="id" hidden value="{{propInfo.id}}">
+
+  <label for="address" class="block mb-5 text-primary">Address</label>
+  <textarea required id="address" name="address" maxlength="60" class="border border-primary p-2 w-full"></textarea>
+
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+  </div>
+  <div>
+    <h1 class="mb-5 text-center">Current Address</h1>
+    <p class="text-center">{{propInfo.address}}</p>
+  </div>
+    </div>
+  </form>
+  <form class="border-b border-primary pt-6" action="/updateDesc" method="post" id="price">
+    <div class="grid grid-cols-2 justify-center">
+  <div>
+    <input type="number" name="id" hidden value="{{propInfo.id}}">
+
+  <label for="desc" class="block mb-5 text-primary">Description</label>
+  <textarea required id="description" name="description" maxlength="200" class="border border-primary p-2 w-full"></textarea>
+
+        <div class="flex justify-center py-10">
+            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-accent hover:text-primary transition-all duration-200 ">Update</button>
+
+        </div>
+  </div>
+  <div>
+    <h1 class="mb-5 text-center">Current description</h1>
+    <p class="text-center">{{propInfo.desc}}</p>
+  </div>
+    </div>
+  </form>
+</div>
+
+    
+    
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+
+
+<script>
+const propId = {{propInfo.id}}
+
+const baseImgCroppie = new Croppie(document.getElementById('baseImgPreview'), {
+    enableExif: true,
+    viewport: {
+      width: 200,
+      height: 200,
+      type: 'square'
+    },
+    boundary: {
+      width: 300,
+      height: 300
+    }
+  });
+
+
+
+
+
+const handleBaseImgChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        baseImgCroppie.bind({
+          url: e.target.result
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  document.getElementById('baseImg').addEventListener('change', handleBaseImgChange);
+
+  const updateImg = async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData();
+  const baseImgCropped = await baseImgCroppie.result('blob');
+  const baseImgInput = document.getElementById('baseImg');
+  const id = propId
+
+  formData.append('baseImg', baseImgInput.files[0]);
+  formData.append('baseImgCropped', baseImgCropped, 'baseImgCropped.png');
+  formData.append("propId",id)
+    console.log(formData)
+  try {
+    const response = await fetch('/updatePropImg', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (response.ok) {
+      alert('Image updated successfully!');
+      // Redirect to another page or perform additional actions
+    } else {
+      alert('Failed to update Image. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred. Please try again.');
+  }
+};
+
+
+
+
+  const form = document.getElementById('updateImg')
+  form.addEventListener('submit',updateImg)
+
+
+
+    // Handle base image selection
+
+
+</script>
+{% endblock body %}

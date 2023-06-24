@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold text-primary mb-4">Property Form</h1>
+  <form id="propertyForm" enctype="multipart/form-data" class="max-w-md">
+    <div class="mb-4">
+      <label for="baseImg" class="block mb-1 text-secondary">Base Image (1:1 Aspect Ratio)</label>
+      <input required type="file" id="baseImg" name="baseImg" accept="image/*" class="border border-secondary p-2 w-full">
+      <div id="baseImgPreview" class="mt-2"></div>
+      <input type="hidden" id="baseImgCropped" name="baseImgCropped">
+    </div>
+
+    <div class="mb-4">
+      <label for="listingType" class="block mb-1 text-primary">Listing Type</label>
+      <select required id="listingType" name="listingType" class="border border-primary p-2 w-full">
+        <option value="SALE">For Sale</option>
+        <option value="RENT">For Rent</option>
+      </select>
+    </div>
+    <div class="mb-4">
+      <label for="propType" class="block mb-1 text-primary">Property Type</label>
+      <select required id="propType" name="propType" class="border border-primary p-2 w-full">
+        <option value="HOUSE">House</option>
+        <option value="APARTMENT">Apartment</option>
+        <option value="COMERCIAL">Comercial</option>
+
+      </select>
+    </div>
+    <div class="mb-4">
+      <label for="description" class="block mb-1 text-primary">Description (Max 200 words)</label>
+      <textarea required id="description" name="description" maxlength="200" class="border border-primary p-2 w-full"></textarea>
+    </div>
+    <div class="mb-4">
+      <label for="price" class="block mb-1 text-primary">Price</label>
+      <input required type="number" id="price" name="price" min="0" class="border border-primary p-2 w-full">
+    </div>
+    <div class="mb-4">
+      <label for="area" class="block mb-1 text-primary">Area</label>
+      <input required type="number" id="area" name="area" min="0" class="border border-primary p-2 w-full">
+    </div>
+    <div class="mb-4">
+      <label for="rooms" class="block mb-1 text-primary">Number of Rooms</label>
+      <input required type="number" id="rooms" name="rooms" min="0" class="border border-primary p-2 w-full">
+    </div>
+    <div class="mb-4">
+
+      <label class="block mb-1 text-primary" for="city">City:</label>
+      <select required id="city" name="city"></select>
+    </div>
+    <div class="mb-4">
+
+      <label class="block mb-1 text-primary" for="location">Location:</label>
+      <select required id="location" name="location"></select>
+    </div>
+    <div class="mb-4">
+      <label for="address" class="block mb-1 text-primary">Address (Max 60 words)</label>
+      <textarea required id="address" name="address" maxlength="60" class="border border-primary p-2 w-full"></textarea>
+    </div>
+
+
+    
+    <button type="submit" class="bg-primary text-white py-2 px-4 rounded">Submit</button>
+  </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script>
+
+// Get references to the city and location dropdowns
+var cityDropdown = document.getElementById('city');
+var locationDropdown = document.getElementById('location');
+
+// Function to fetch the JSON data
+function fetchData() {
+  fetch('/getCityLocation')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      // Populate the city dropdown
+      for (var city in data) {
+        var option = document.createElement('option');
+        option.text = city;
+        cityDropdown.add(option);
+      }
+
+      // Populate the location dropdown based on the selected city
+      cityDropdown.addEventListener('change', function() {
+        var selectedCity = cityDropdown.value;
+        var locations = data[selectedCity];
+
+        // Clear the location dropdown
+        locationDropdown.innerHTML = '';
+
+        // Populate the location dropdown
+        for (var i = 0; i < locations.length; i++) {
+          var option = document.createElement('option');
+          option.text = locations[i];
+          locationDropdown.add(option);
+        }
+      });
+    })
+    .catch(function(error) {
+      console.log('Error:', error);
+    });
+}
+
+// Call the fetchData function to populate the dropdowns
+fetchData();
+
+
+
+
+
+
+  // Initialize Croppie instance
+  const baseImgCroppie = new Croppie(document.getElementById('baseImgPreview'), {
+    enableExif: true,
+    viewport: {
+      width: 200,
+      height: 200,
+      type: 'square'
+    },
+    boundary: {
+      width: 300,
+      height: 300
+    }
+  });
+
+  // Function to handle form submission
+  const submitNewProp = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    const baseImgCropped = await baseImgCroppie.result('blob');
+    const baseImgInput = document.getElementById('baseImg');
+    const listingTypeInput = document.getElementById('listingType');
+    const propTypeInput = document.getElementById('propType');
+
+    const descriptionInput = document.getElementById('description');
+    const priceInput = document.getElementById('price');
+    const areaInput = document.getElementById('area');
+    const roomsInput = document.getElementById('rooms');
+    const city = document.getElementById('city');
+    const location = document.getElementById('location');
+    const address = document.getElementById('address');
+
+    formData.append('baseImg', baseImgInput.files[0]);
+    formData.append('baseImgCropped', baseImgCropped, 'baseImgCropped.png');
+    formData.append('listingType', listingTypeInput.value);
+    formData.append('propType', propTypeInput.value);
+    formData.append('description', descriptionInput.value);
+    formData.append('price', priceInput.value);
+    formData.append('area', areaInput.value);
+    formData.append('rooms', roomsInput.value);
+    formData.append('city', city.value);
+    formData.append('location', location.value);
+    formData.append('address', address.value);
+
+    try {
+      const response = await fetch('/newproperty', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        alert('Property added successfully!');
+        // Redirect to another page or perform additional actions
+      } else {
+        alert('Failed to add property. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  };
+
+  // Add event listener to form submit
+  const form = document.getElementById('propertyForm');
+  form.addEventListener('submit', submitNewProp);
+
+  // Handle base image selection
+  const handleBaseImgChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        baseImgCroppie.bind({
+          url: e.target.result
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Add event listener to image input field
+  document.getElementById('baseImg').addEventListener('change', handleBaseImgChange);
+</script>
+{% endblock body %}
